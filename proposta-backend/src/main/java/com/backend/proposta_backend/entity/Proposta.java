@@ -1,8 +1,12 @@
 package com.backend.proposta_backend.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Data
 public class Proposta {
@@ -17,7 +21,7 @@ public class Proposta {
     private boolean integrada;
     private String observacao;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 }
