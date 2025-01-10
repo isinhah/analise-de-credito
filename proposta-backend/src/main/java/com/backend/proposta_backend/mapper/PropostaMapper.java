@@ -7,10 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface PropostaMapper {
 
-    // interação com a interface
     PropostaMapper INSTANCE = Mappers.getMapper(PropostaMapper.class);
 
     @Mapping(target = "id", ignore = true)
@@ -29,4 +30,6 @@ public interface PropostaMapper {
     @Mapping(target = "cpf", source = "usuario.cpf")
     @Mapping(target = "renda", source = "usuario.renda")
     PropostaResponseDto convertEntityToDto(Proposta proposta);
+
+    List<PropostaResponseDto> convertListEntityToListDto(Iterable<Proposta> propostas);
 }

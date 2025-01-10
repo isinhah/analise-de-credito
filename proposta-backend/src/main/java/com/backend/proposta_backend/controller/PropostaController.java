@@ -5,11 +5,14 @@ import com.backend.proposta_backend.dto.PropostaResponseDto;
 import com.backend.proposta_backend.service.PropostaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,6 +20,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class PropostaController {
 
     private final PropostaService propostaService;
+
+    @GetMapping
+    public ResponseEntity<List<PropostaResponseDto>> obterPropostas() {
+        return ResponseEntity.ok(propostaService.obterProposta());
+    }
 
     @PostMapping
     public ResponseEntity<PropostaResponseDto> criar(@RequestBody PropostaRequestDto requestDto) {
