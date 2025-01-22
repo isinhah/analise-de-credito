@@ -6,6 +6,7 @@ import com.backend.proposta_backend.entity.Proposta;
 import com.backend.proposta_backend.mapper.PropostaMapper;
 import com.backend.proposta_backend.repository.PropostaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +15,26 @@ import java.util.List;
 @Service
 public class PropostaService {
 
-    private final PropostaRepository propostaRepository;
+    private PropostaRepository propostaRepository;
+    private NotificacaoService notificacaoService;
+    private String exchange;
+
+    public PropostaService(PropostaRepository propostaRepository,
+                           NotificacaoService notificacaoService,
+                           @Value("${spring.rabbitmq.exchanges.proposta-pendente}") String exchange) {
+        this.propostaRepository = propostaRepository;
+        this.notificacaoService = notificacaoService;
+        this.exchange = exchange;
+    }
 
     public PropostaResponseDto criar(PropostaRequestDto requestDto) {
         Proposta proposta = PropostaMapper.INSTANCE.convertDtoToProposta(requestDto);
         propostaRepository.save(proposta);
 
-        return PropostaMapper.INSTANCE.convertEntityToDto(proposta);
+        PropostaResponseDto response = PropostaMapper.INSTANCE.convertEntityToDto(proposta);
+        notificacaoService.notificar(response, exchange);
+
+        return response;
     }
 
     public List<PropostaResponseDto> obterProposta() {
