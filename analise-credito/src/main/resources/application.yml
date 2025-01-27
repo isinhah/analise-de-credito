@@ -1,0 +1,9 @@
+# Database Configuration
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    exchanges:
+      proposta-pendente: proposta-pendente.ms-analise-credito
