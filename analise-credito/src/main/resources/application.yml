@@ -1,9 +1,9 @@
-# Database Configuration
-spring:
-  rabbitmq:
+rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-    exchanges:
+    queue:
       proposta-pendente: proposta-pendente.ms-analise-credito
+    exchanges:
+      proposta-concluida: proposta-concluida.ex
