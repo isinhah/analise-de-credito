@@ -16,6 +16,8 @@ spring:
         port: 5672
         username: guest
         password: guest
+        queue:
+          proposta-concluida: proposta-concluida.ms-proposta
         exchanges:
             proposta-pendente: proposta-pendente.ex
             proposta-concluida: proposta-concluida.ex

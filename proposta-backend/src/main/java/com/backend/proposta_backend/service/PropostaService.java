@@ -5,6 +5,7 @@ import com.backend.proposta_backend.dto.PropostaResponseDto;
 import com.backend.proposta_backend.entity.Proposta;
 import com.backend.proposta_backend.mapper.PropostaMapper;
 import com.backend.proposta_backend.repository.PropostaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,10 @@ public class PropostaService {
         this.exchange = exchange;
     }
 
+    @Transactional
     public PropostaResponseDto criar(PropostaRequestDto requestDto) {
         Proposta proposta = PropostaMapper.INSTANCE.convertDtoToProposta(requestDto);
+
         propostaRepository.save(proposta);
 
         notificarRabbitMq(proposta);
