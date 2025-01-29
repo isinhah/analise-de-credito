@@ -27,9 +27,24 @@ public class RabbitMQConfiguration {
     @Value("${spring.rabbitmq.exchanges.proposta-concluida}")
     private String exchangePropostaConcluida;
 
+    @Value("${spring.rabbitmq.exchanges.proposta-pendente-dlx}")
+    private String exchangePropostaPendenteDLX;
+
     @Bean
     public Queue criarFilaPropostaPendenteMsAnaliseCredito() {
-        return QueueBuilder.durable("proposta-pendente.ms-analise-credito").build();
+        return QueueBuilder.durable("proposta-pendente.ms-analise-credito")
+                .deadLetterExchange(exchangePropostaPendenteDLX)
+                .build();
+    }
+
+    @Bean
+    public Queue criarFilaPropostaPendenteDlq() {
+        return QueueBuilder.durable("proposta-pendente.dlq").build();
+    }
+
+    @Bean
+    public FanoutExchange deadLetterExchange() {
+        return ExchangeBuilder.fanoutExchange(exchangePropostaPendenteDLX).build();
     }
 
     @Bean
