@@ -1,9 +1,9 @@
 FROM openjdk:17
 
+WORKDIR /app
+
 COPY target/proposta-backend-0.0.1-SNAPSHOT.jar proposta-backend.jar
 
-COPY wait-for-it.sh wait-for-it.sh
+EXPOSE 8080
 
-RUN chmod +x wait-for-it.sh
-
-ENTRYPOINT ["./wait-for-it.sh", "rabbit-mq:5672", "--", "java", "-Duser.language=pt", "-Duser.country=BR", "-jar", "proposta-backend.jar"]
+ENTRYPOINT ["java", "-Duser.language=pt", "-Duser.country=BR", "-jar", "proposta-backend.jar"]
