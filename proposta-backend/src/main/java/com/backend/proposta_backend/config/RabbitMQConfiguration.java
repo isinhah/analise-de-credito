@@ -33,6 +33,7 @@ public class RabbitMQConfiguration {
     @Bean
     public Queue criarFilaPropostaPendenteMsAnaliseCredito() {
         return QueueBuilder.durable("proposta-pendente.ms-analise-credito")
+                .maxPriority(10)
                 .deadLetterExchange(exchangePropostaPendenteDLX)
                 .build();
     }

@@ -24,7 +24,7 @@ public class Usuario {
     private String sobrenome;
     private String cpf;
     private String telefone;
-    private String renda;
+    private Double renda;
 
     @JsonBackReference
     @OneToOne(mappedBy = "usuario")

@@ -6,6 +6,7 @@ import com.backend.proposta_backend.entity.Proposta;
 import com.backend.proposta_backend.mapper.PropostaMapper;
 import com.backend.proposta_backend.repository.PropostaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,15 +33,21 @@ public class PropostaService {
 
         propostaRepository.save(proposta);
 
-        notificarRabbitMq(proposta);
-        notificacaoRabbitService.notificar(proposta, exchange);
+        int prioridade = proposta.getUsuario().getRenda() > 10000 ? 10 : 5;
+
+        MessagePostProcessor messagePostProcessor = message -> {
+            message.getMessageProperties().setPriority(prioridade);
+            return message;
+        };
+
+        notificarRabbitMq(proposta, messagePostProcessor);
 
         return PropostaMapper.INSTANCE.convertEntityToDto(proposta);
     }
 
-    private void notificarRabbitMq(Proposta proposta) {
+    private void notificarRabbitMq(Proposta proposta, MessagePostProcessor messagePostProcessor) {
         try {
-            notificacaoRabbitService.notificar(proposta, exchange);
+            notificacaoRabbitService.notificar(proposta, exchange, messagePostProcessor);
         } catch (RuntimeException ex) {
           proposta.setIntegrada(false);
           propostaRepository.save(proposta);

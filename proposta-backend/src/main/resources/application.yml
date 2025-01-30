@@ -1,4 +1,3 @@
-# Database Configuration
 spring:
     datasource:
         url: ${POSTGRES_HOST:jdbc:postgresql://localhost:5432/proposta_db}
@@ -18,6 +17,13 @@ spring:
         password: guest
         queue:
           proposta-concluida: proposta-concluida.ms-proposta
+          proposta-pendente-dlq: proposta-pendente.dlq
         exchanges:
             proposta-pendente: proposta-pendente.ex
+            proposta-pendente-dlx: proposta-pendente-dlx.ex
             proposta-concluida: proposta-concluida.ex
+        listener:
+            simple:
+                retry:
+                    enable: true
+                    max-attempts: 3
