@@ -4,8 +4,7 @@ rabbitmq:
     username: guest
     password: guest
     queue:
-      proposta:
-        pendente: proposta-pendente.ms-notificacao
+      proposta-pendente: proposta-pendente.ms-notificacao
 aws:
     accessKey: ${AWS_ACCESS_KEY}
     secretKey: ${AWS_SECRET_KEY}
